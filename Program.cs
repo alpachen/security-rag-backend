@@ -9,6 +9,17 @@ using RagDataPipeline.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // ============================
+// CORS（前端才能呼叫 API）
+// ============================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", p =>
+        p.AllowAnyOrigin()
+         .AllowAnyHeader()
+         .AllowAnyMethod());
+});
+
+// ============================
 // 設定：加入 Admin Key
 // ============================
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -29,6 +40,7 @@ builder.Services.AddSingleton<RagQueryService>();
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 // ============================
 // Middleware
 // ============================
